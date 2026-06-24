@@ -14,7 +14,7 @@ jobs:
   # This workflow contains a single job called "simple"
   simple:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -22,27 +22,43 @@ jobs:
         run: echo ${{ secrets.SUPER_SECRET }}
 
   showString:
-    runs-on:  ubuntu-latest
+    runs-on:  self-hosted
 
-    outputs:
+    #outputs:
       #<job-level-name>: ${{ steps.<step-id>.outputs.<key-from-echo> }}
-      my_string: ${{ steps.set_string.outputs.assigned_string }}
+      #my_string: ${{ steps.set_string.outputs.assigned_string }}
     steps:
       - name: Show string
-        id: set_string
-        run: echo "assigned_string=I chose these words" >> $GITHUB_OUTPUT
+        #id: set_string
+        run: echo "assigned_string=I chose these words" > my_string.txt
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: my-string #naming the artifact
+          path: my_string.txt #the artifact
 
   theMatrix:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     #allows job to use exposed output string
     needs: showString
     strategy:
       matrix:
         number: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     steps:
-      - name: Print string with number
+      #- name: Print string with number
         #"<output from previous job>-<numbers 1-10, one at a time>"
-        run: echo "${{ needs.showString.outputs.my_string }}-${{ matrix.number }}"
+        #run: echo "${{ needs.showString.outputs.my_string }}-${{ matrix.number }}"
+      - name: Download Artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: my-string
+          
+      - name: Read file into env
+        run: echo "MY_STRING=$(cat my_string.txt)" >> $GITHUB_ENV #save my file as a variable
+
+      - name: Print string with number
+        run: echo "$MY_STRING-${{ matrix.number }}"
         
       
 
