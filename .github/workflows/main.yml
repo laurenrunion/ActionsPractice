@@ -20,3 +20,14 @@ jobs:
     steps:
       - name: Run a one-line script
         run: echo ${{ secrets.SUPER_SECRET }}
+
+  showString:
+    runs-on:  ubuntu-latest
+
+    outputs:
+      #<job-level-name>: ${{ steps.<step-id>.outputs.<key-from-echo> }}
+      my_string: ${{ steps.set_string.outputs.assigned_string }}
+    steps:
+      - name: Show string
+        id: set_string
+        run: echo "assigned_string=I chose these words" >> $GITHUB_OUTPUT
