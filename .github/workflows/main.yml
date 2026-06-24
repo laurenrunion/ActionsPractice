@@ -31,3 +31,21 @@ jobs:
       - name: Show string
         id: set_string
         run: echo "assigned_string=I chose these words" >> $GITHUB_OUTPUT
+
+  theMatrix:
+    runs-on: ubuntu-latest
+    #allows job to use exposed output string
+    needs: showString
+    strategy:
+      matrix:
+        number: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    steps:
+      - name: Print string with number
+        #"<output from previous job>-<numbers 1-10, one at a time>"
+        run: echo "${{ needs.showString.outputs.my_string }}-${{ matrix.number }}
+        
+      
+
+
+
+
