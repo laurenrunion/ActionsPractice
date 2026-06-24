@@ -42,7 +42,7 @@ jobs:
     steps:
       - name: Print string with number
         #"<output from previous job>-<numbers 1-10, one at a time>"
-        run: echo "${{ needs.showString.outputs.my_string }}-${{ matrix.number }}
+        run: echo "${{ needs.showString.outputs.my_string }}-${{ matrix.number }}"
         
       
 
