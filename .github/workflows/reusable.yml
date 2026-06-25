@@ -21,7 +21,7 @@ jobs:
     runs-on:  self-hosted
     steps:
       - name: Checkout #clone repo into runner(not done itself)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Generate String
         id: generate-string
         #run: echo "assigned_string=I chose these words" > my_string.txt not hardcoded anymore
