@@ -1,1 +1,12 @@
+name: Caller
 
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  call-reusable: #like call reuseable workflow
+    uses: ./.github/workflows/reusable.yml
+    with:
+      my_input: "I am calling the reusable workflow"
