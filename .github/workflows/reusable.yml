@@ -1,9 +1,9 @@
 name: Reusable CI
 
 on:
-  workflow_call: #here is what i accept
+  workflow_call: 
     inputs:
-      my_input:
+      my_input: #here is what i accept
         description: The string to use
         required: false
         type: string
