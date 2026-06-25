@@ -1,0 +1,21 @@
+name: Build String
+description: Generates a string from input or uses a default if not input
+
+inputs:
+  my_input: #my name
+    description: The string to use
+    required: false
+    default: "I am the default string"
+
+outputs:
+  result:
+    description: The generated string
+    value: ${{ steps.set_string.outputs.result }}
+
+runs:
+  using: "composite" #specifies action type, composite for series of shell commands
+  steps:
+    - name: Set string
+      id: set_string
+      run: echo "result=${{ inputs.my_input }}" >> $GITHUB_OUTPUT #exposes result as an output of that step(set_string)
+      shell: bash
