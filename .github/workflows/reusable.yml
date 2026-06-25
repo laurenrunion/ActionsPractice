@@ -20,6 +20,8 @@ jobs:
   showString:
     runs-on:  self-hosted
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Generate String
         id: generate-string
         #run: echo "assigned_string=I chose these words" > my_string.txt not hardcoded anymore
