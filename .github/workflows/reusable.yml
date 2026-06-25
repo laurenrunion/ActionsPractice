@@ -1,1 +1,57 @@
+name: Reusable CI
 
+on:
+  workflow_call: #here is what i accept
+    inputs:
+      my_input:
+        description: The string to use
+        required: false
+        type: string
+        default: "I am the default string"
+
+jobs:
+  simple:
+    runs-on: self-hosted
+
+    steps:
+      - name: Run a one-line script
+        run: echo ${{ secrets.SUPER_SECRET }}
+
+  showString:
+    runs-on:  self-hosted
+    steps:
+      - name: Generate String
+        id: generate-string
+        #run: echo "assigned_string=I chose these words" > my_string.txt not hardcoded anymore
+        uses: ./.github/actions/string-builder #call actions generate string
+        with:
+          my_input: ${{ inputs.my_input }}
+
+      - name: Write string to file
+        run: echo "${{ steps.generate-string.outputs.result }}" > my_string.txt #exposed so it can be uploaded as artifact for next job
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: my-string #naming the artifact
+          path: my_string.txt #the artifact
+
+  theMatrix:
+    runs-on: self-hosted
+    needs: showString
+    strategy:
+      matrix:
+        number: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: my-string
+          
+      - name: Read file into env
+        run: echo "MY_STRING=$(cat my_string.txt)" >> $GITHUB_ENV #save my file as a variable
+
+      - name: Print string with number
+        run: echo "$MY_STRING-${{ matrix.number }}"
+        
+      
