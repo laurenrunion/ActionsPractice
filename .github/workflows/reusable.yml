@@ -20,7 +20,7 @@ jobs:
   showString:
     runs-on:  self-hosted
     steps:
-      - name: Checkout
+      - name: Checkout #clone repo into runner(not done itself)
         uses: actions/checkout@v4
       - name: Generate String
         id: generate-string
