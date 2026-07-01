@@ -21,13 +21,14 @@ jobs:
     runs-on:  self-hosted
     steps:
       - name: Checkout #clone repo into runner(not done itself)
+      #only needed when you need repo contents. I need the action
         uses: actions/checkout@v7
       - name: Generate String
         id: generate-string
         #run: echo "assigned_string=I chose these words" > my_string.txt not hardcoded anymore
         uses: ./.github/actions/string-builder #call actions generate string
         with:
-          my_input: ${{ inputs.my_input }}
+          my_input: ${{ inputs.my_input }} #save output from actions into my_input
 
       - name: Write string to file
         run: echo "${{ steps.generate-string.outputs.result }}" > my_string.txt #exposed so it can be uploaded as artifact for next job
