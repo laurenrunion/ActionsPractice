@@ -7,15 +7,15 @@ inputs:
     required: false
     default: "I am the default string"
 
-outputs:
+outputs: #what exposes the string itself to whatever calls it. done after steps
   result:
     description: The generated string
     value: ${{ steps.set_string.outputs.result }}
 
 runs:
-  using: "composite" #specifies action type, composite for series of shell commands
+  using: "composite" #specifies action type, composite for series of shell commands; runs inline(others include docker and node20)
   steps:
     - name: Set string
       id: set_string
       run: echo "result=${{ inputs.my_input }}" >> $GITHUB_OUTPUT #exposes result as an output of that step(set_string)
-      shell: bash
+      shell: bash #declare a shell
